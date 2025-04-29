@@ -3,8 +3,6 @@ package edu.khlep.controller;
 import java.util.List;
 
 import edu.khlep.model.AppUser;
-// import edu.khlep.model.Employee;
-// import edu.khlep.service.EmployeeService;
 import edu.khlep.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,24 +30,23 @@ public class MainController {
         return "main"; 
     } 
     
-    @GetMapping("/register")
+    @GetMapping("/sign-up")
     public String showRegistrationForm(Model model) {
         model.addAttribute("user", new AppUser());
-        return "register";
+        return "sign-up";
     }
     
-    @PostMapping("/register")
-    public String registerUser(@ModelAttribute("user") AppUser user) {
+    @PostMapping("/sign-up")
+    public String SignUpUser(@ModelAttribute("user") AppUser user) {
         try {
-            userService.registerNewUser(user);
+            userService.SignUpNewUser(user);
         } catch (Exception e) {
-            // Если регистрация не удалась, можно добавить обработку ошибки и возвращать на страницу регистрации
-            return "register";
+            return "sign-up";
         }
-        return "redirect:/login?registered";
+        return "redirect:/login?sign-uped";
     }
     @GetMapping("/login")
     public String login() {
-        return "login"; // возвращает шаблон login.html из папки templates
+        return "login"; 
     }
 }

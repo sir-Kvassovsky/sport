@@ -30,7 +30,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(requests -> requests
-                .requestMatchers("/login", "/register", "/error", "/static/**").permitAll()
+                .requestMatchers("/login", "/sign-up", "/error", "/static/**").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
@@ -45,7 +45,6 @@ public class SecurityConfig {
                 .permitAll()
             )
             .authenticationProvider(authenticationProvider());
-        // Важно: оставляем CSRF включенным, чтобы в шаблонах _csrf был доступен.
         return http.build();
     }
 
@@ -64,7 +63,6 @@ public class SecurityConfig {
                 AppUser admin = new AppUser();
                 admin.setUsername("admin");
                 admin.setPassword(passwordEncoder.encode("admin"));
-                // Устанавливаем роль "ADMIN" – Spring Security автоматически добавит префикс "ROLE_"
                 admin.setRole("ADMIN");
                 userRepository.save(admin);
                 System.out.println("Admin user created with username 'admin' and password 'admin'");

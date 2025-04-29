@@ -35,14 +35,14 @@
         button:hover { 
             background-color: #0056b3; 
         }
-        .register-link {
+        .sign-up-link {
             margin-top: 15px;
         }
-        .register-link a {
+        .sign-up-link a {
             color: #007bff;
             text-decoration: none;
         }
-        .register-link a:hover {
+        .sign-up-link a:hover {
             text-decoration: underline;
         }
     </style>
@@ -56,8 +56,8 @@
     </form>
     <p th:if="${param.error}" style="color:red;">Invalid username or password</p>
     <p th:if="${param.logout}" style="color:green;">You have been logged out</p>
-    <div class="register-link">
-        <p>No account? <a th:href="@{/register}">Register here</a></p>
+    <div class="sign-up-link">
+        <p>No account? <a th:href="@{/sign-up}">Sign up here</a></p>
     </div>
 </body>
 </html>

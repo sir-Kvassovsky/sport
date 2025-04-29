@@ -28,7 +28,7 @@ public class UserService implements UserDetailsService {
                    .build();
     }
 
-    public AppUser registerNewUser(AppUser user) {
+    public AppUser SignUpNewUser(AppUser user) {
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             throw new RuntimeException("Username already exists");
         }
