@@ -1,9 +1,137 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Main page</title>
-    </head>
-    <body>
-        <p>Poka tak potom prodolshy
-    </body>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Main Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            background-color: #f8f9fa;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .dark-mode {
+            background-color: #2c2c2c;
+            color: #f1f1f1;
+        }
+        header {
+            position: fixed;
+            top: 0;
+            left: 200px;
+            right: 0;
+            height: 50px;
+            background: #fff;
+            border-bottom: 1px solid #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 0 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: background 0.3s;
+        }
+        .dark-mode header {
+            background: #222;
+        }
+        .tabs {
+            width: 200px;
+            background: #fff;
+            border-right: 1px solid #ccc;
+            padding-top: 50px;
+            box-sizing: border-box;
+        }
+        .dark-mode .tabs {
+            background: #333;
+        }
+        .tab {
+            padding: 15px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .tab:hover, .tab.active {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .dark-mode .tab:hover, .dark-mode .tab.active {
+            background-color: #0056b3;
+        }
+        main {
+            margin-top: 50px;
+            padding: 20px;
+            flex: 1;
+            overflow-y: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #e9ecef;
+        }
+        .dark-mode th {
+            background-color: #444;
+        }
+    </style>
+    <script>
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+    </script>
+</head>
+<body>
+    <script src="/js/dark-mode.js"></script>
+    <div class="tabs">
+        <a th:href="@{/}" class="tab" th:classappend="${activeTab=='home'} ? ' active' : ''">Home</a>
+        <a th:href="@{/about}" class="tab" th:classappend="${activeTab=='about'} ? ' active' : ''">About the Author</a>
+    </div>
+    <header>
+        <button class="toggle-dark" onclick="toggleDarkMode()">🌙</button>
+        <div style="margin-left: 20px;">
+            <div sec:authorize="hasRole('ROLE_ANONYMOUS')">
+                <a th:href="@{/login}">Login</a> /
+                <a th:href="@{/sign-up}">Sign Up</a>
+            </div>
+            <div sec:authorize="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')">
+                <a th:href="@{/logout}">Logout</a>
+            </div>
+            <div sec:authorize="hasRole('ROLE_ADMIN')">
+                <a th:href="@{/admin/dashboard}">Admin Panel</a>
+            </div>
+        </div>
+    </header>
+    <main>
+        <h2>Data Table</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+               <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Value</th>
+                </tr>
+                <!-- <tr th:each="item : ${items}">
+                    <td th:text="${item.id}"></td>
+                    <td th:text="${item.name}"></td>
+                    <td th:text="${item.value}"></td>
+                </tr> -->
+            </tbody>
+        </table>
+    </main>
+</body>
 </html>

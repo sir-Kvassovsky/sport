@@ -28,23 +28,46 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-            .authorizeHttpRequests(requests -> requests
-                .requestMatchers("/login", "/sign-up", "/error", "/static/**").permitAll()
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated()
+        http            
+            .authorizeHttpRequests(authorize -> authorize
+                .requestMatchers(
+                    "/",                
+                    "/public/**",       
+                    "/login",
+                    "/sign-up",
+                    "/error",
+                    "/main"
+                ).permitAll()
+
+           
+                .requestMatchers("/user/**")
+                    .hasRole("USER")
+
+           
+                .requestMatchers("/admin/**")
+                    .hasRole("ADMIN")
+
+           
+                .anyRequest()
+                    .hasAnyRole("USER", "ADMIN")
             )
+
+            
             .formLogin(form -> form
                 .loginPage("/login")
                 .defaultSuccessUrl("/main", true)
                 .permitAll()
             )
+
             .logout(logout -> logout
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/login?logout")
+                .logoutSuccessUrl("/main")
                 .permitAll()
             )
+
+            
             .authenticationProvider(authenticationProvider());
+
         return http.build();
     }
 
@@ -56,12 +79,18 @@ public class SecurityConfig {
         return provider;
     }
 
+
+
     @Bean
     public CommandLineRunner createAdminUser(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         return args -> {
+            // Проверка: есть ли уже администратор с именем и фамилией admin
             if (userRepository.findByUsername("admin").isEmpty()) {
                 AppUser admin = new AppUser();
                 admin.setUsername("admin");
+                admin.setFirstName("admin");
+                admin.setLastName("admin");
+                admin.setBirthYear(1990); // Укажите нужный год рождения
                 admin.setPassword(passwordEncoder.encode("admin"));
                 admin.setRole("ADMIN");
                 userRepository.save(admin);
