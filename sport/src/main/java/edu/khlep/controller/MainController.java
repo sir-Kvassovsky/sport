@@ -26,9 +26,9 @@ public class MainController {
     } 
     
     @GetMapping("/main")
-    public String main() {
-        return "main"; 
-    } 
+    public String Main(Model model) {
+        return "main";
+    }
     
     @GetMapping("/sign-up")
     public String showRegistrationForm(Model model) {

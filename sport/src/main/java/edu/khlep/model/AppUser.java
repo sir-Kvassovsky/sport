@@ -46,4 +46,15 @@ public class AppUser {
 
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", birthYear=" + birthYear +
+                ", role='" + role + '\'' +
+                '}';
+    }
 }
+
