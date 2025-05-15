@@ -3,88 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Edit User</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin-top: 100px;
-      transition: background-color 0.3s, color 0.3s;
-    }
-    .light-mode {
-      background-color: #f8f9fa;
-      color: #000;
-    }
-    .dark-mode {
-      background-color: #121212;
-      color: #f1f1f1;
-    }
-    form {
-      display: inline-block;
-      padding: 20px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      background-color: #fff;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    .dark-mode form {
-      background-color: #1e1e1e;
-      border-color: #444;
-      color: #f1f1f1;
-    }
-    input {
-      display: block;
-      margin: 10px auto;
-      padding: 8px;
-      width: 200px;
-    }
-    button {
-      padding: 8px 15px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    .toggle-dark {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background-color: #6c757d;
-      color: white;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    .dark-mode .toggle-dark {
-      background-color: #444;
-    }
-    .login-link a {
-      color: #007bff;
-      text-decoration: none;
-    }
-    .login-link a:hover {
-      text-decoration: underline;
-    }
-    #darkToggle {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background-color: #6c757d;
-      color: white;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    .dark-mode #darkToggle {
-      background-color: #444;
-    }
-  </style>
+  <link rel="stylesheet" th:href="@{/css/forms.css}" />
 </head>
 <body>
   <button id="darkToggle">🌙</button>
@@ -95,28 +14,23 @@
     <input type="hidden" th:field="*{id}" />
 
     <div class="form-group">
-
       <input type="text" id="username" th:field="*{username}" placeholder="Username" required/>
     </div>
 
     <div class="form-group">
-
       <input type="text" id="firstName" th:field="*{firstName}" placeholder="First name" required/>
     </div>
 
     <div class="form-group">
-
       <input type="text" id="lastName" th:field="*{lastName}" placeholder="Last name" required/>
     </div>
 
     <div class="form-group">
-
       <input type="number" id="birthYear" th:field="*{birthYear}" placeholder="1980" required/>
     </div>
 
     <input type="hidden" th:field="*{password}" />
     <input type="hidden" th:field="*{role}" />
-
 
     <button type="submit">Update User</button>
   </form>
@@ -125,24 +39,6 @@
     <p><a th:href="@{/admin/dashboard}">Back to User List</a></p>
   </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const saved = localStorage.getItem('theme') || 'light';
-      document.body.classList.add(saved + '-mode');
-      const btn = document.getElementById('darkToggle');
-      btn.addEventListener('click', () => {
-        const isDark = document.body.classList.contains('dark-mode');
-        document.body.classList.toggle('dark-mode', !isDark);
-        document.body.classList.toggle('light-mode', isDark);
-        localStorage.setItem('theme', isDark ? 'light' : 'dark');
-      });
-    });
-    function toggleDarkMode() {
-      const isDark = document.body.classList.contains('dark-mode');
-      document.body.classList.toggle('dark-mode', !isDark);
-      document.body.classList.toggle('light-mode', isDark);
-      localStorage.setItem('theme', isDark ? 'light' : 'dark');
-    }
-  </script>
+  <script th:src="@{/js/dark-mode.js}" defer></script>
 </body>
 </html>
