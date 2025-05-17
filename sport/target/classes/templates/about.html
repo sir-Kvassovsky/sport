@@ -31,33 +31,45 @@
       <div sec:authorize="hasAnyRole('PARTISIPANT','ADMIN','MANAGER')">
         <a th:href="@{/logout}">Logout</a>
       </div>
+      <div sec:authorize="hasRole('ROLE_ADMIN')">
+        <a th:href="@{/admin/dashboard}">Admin Panel</a>
+      </div>
     </div>
   </header>
 
   <main>
     <h2>About the Author</h2>
     <section>
-      <dl>
+      <dl class="form-group">
+        <div class="profile-row">
         <dt>ФИО автора</dt>
         <dd>Хлепитько Илья Игоревич</dd>
+        </div>
 
+        <div class="profile-row">
         <dt>Группа / Учебное заведение</dt>
         <dd>ТРПО23-4 / 
           <a href="https://www.fa.ru" target="_blank" rel="noopener"> Финансовый университет при Правительстве Российской Федерации</a></dd>
-
+        </div>
+        <div class="profile-row">
         <dt>Контактные данные</dt>
         <dd>
           <a href="mailto:lluyshonchik@gmail.com">llyushonchik@gmail.com</a>,
           <a href="mailto:230599@edu.fa.ru">230599@edu.fa.ru</a>
         </dd>
+        </div>
 
+        <div class="profile-row">
         <dt>Опыт работы с технологиями</dt>
         <dd>
           Spring Boot: менее года; Thymeleaf: менее года; PostgreSQL: менее года
         </dd>
+        </div>
 
+        <div class="profile-row">
         <dt>Даты начала и завершения проекта</dt>
         <dd>01.05.2025 – 18.05.2025</dd>
+        </div>
       </dl>
     </section>
   </main>
