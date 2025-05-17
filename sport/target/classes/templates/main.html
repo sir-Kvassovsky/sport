@@ -4,11 +4,13 @@
 <head>
   <meta charset="UTF-8">
   <title>Main Page</title>
+  <script th:src="@{/js/dark-mode.js}" defer></script>
   <link rel="stylesheet" th:href="@{/css/tables.css}" />
 </head>
 <body>
   <div class="tabs">
-    <a th:href="@{/}"      class="tab" th:classappend="${activeTab=='home'} ? ' active' : ''">Home</a>
+    <a th:href="@{/}" class="tab" th:classappend="${activeTab=='home'} ? ' active' : ''">Home</a>
+    <a sec:authorize="hasRole('ROLE_PARTICIPANT') or hasRole('ROLE_MANAGER')" th:href="@{/profile}" class="tab" th:classappend="${activeTab=='profile'} ? ' active' : ''">Profile</a>
     <a th:href="@{/about}" class="tab" th:classappend="${activeTab=='about'} ? ' active' : ''">About the Author</a>
   </div>
 
@@ -19,7 +21,7 @@
         <a th:href="@{/login}">Login</a> /
         <a th:href="@{/sign-up}">Sign Up</a>
       </div>
-      <div sec:authorize="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')">
+      <div sec:authorize="hasRole('ROLE_PARTICIPANT') or hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')">
         <a th:href="@{/logout}">Logout</a>
       </div>
       <div sec:authorize="hasRole('ROLE_ADMIN')">
@@ -44,6 +46,5 @@
     </table>
   </main>
 
-  <script th:src="@{/js/dark-mode.js}" defer></script>
 </body>
 </html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <title>About the Author</title>
+  <script th:src="@{/js/dark-mode.js}" defer></script>
+  <link rel="stylesheet" th:href="@{/css/tables.css}" />
+</head>
+<body>
+  <div class="tabs">
+    <a th:href="@{/}" class="tab" th:classappend="${activeTab=='home'} ? ' active' : ''">Home</a>
+    <a sec:authorize="hasRole('ROLE_PARTICIPANT') or hasRole('ROLE_MANAGER')"
+       th:href="@{/profile}" class="tab"
+       th:classappend="${activeTab=='profile'} ? ' active' : ''">
+      Profile
+    </a>
+    <a th:href="@{/about}" class="tab"
+       th:classappend="${activeTab=='about'} ? ' active' : ''">
+      About the Author
+    </a>
+  </div>
+
+  <header>
+    <button id="darkToggle">🌙</button>
+    <div style="margin-left: 20px;">
+      <div sec:authorize="hasRole('ROLE_ANONYMOUS')">
+        <a th:href="@{/login}">Login</a> /
+        <a th:href="@{/sign-up}">Sign Up</a>
+      </div>
+      <div sec:authorize="hasAnyRole('PARTISIPANT','ADMIN','MANAGER')">
+        <a th:href="@{/logout}">Logout</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <h2>About the Author</h2>
+    <section>
+      <dl>
+        <dt>ФИО автора</dt>
+        <dd>Хлепитько Илья Игоревич</dd>
+
+        <dt>Группа / Учебное заведение</dt>
+        <dd>ТРПО23-4 / 
+          <a href="https://www.fa.ru" target="_blank" rel="noopener"> Финансовый университет при Правительстве Российской Федерации</a></dd>
+
+        <dt>Контактные данные</dt>
+        <dd>
+          <a href="mailto:lluyshonchik@gmail.com">llyushonchik@gmail.com</a>,
+          <a href="mailto:230599@edu.fa.ru">230599@edu.fa.ru</a>
+        </dd>
+
+        <dt>Опыт работы с технологиями</dt>
+        <dd>
+          Spring Boot: менее года; Thymeleaf: менее года; PostgreSQL: менее года
+        </dd>
+
+        <dt>Даты начала и завершения проекта</dt>
+        <dd>01.05.2025 – 18.05.2025</dd>
+      </dl>
+    </section>
+  </main>
+
+</body>
+</html>

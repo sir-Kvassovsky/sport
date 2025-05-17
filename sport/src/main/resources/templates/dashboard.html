@@ -43,7 +43,7 @@
             <td th:text="${user.lastName}">Doe</td>
             <td th:text="${user.firstName}">John</td>
             <td th:text="${user.birthYear}">1980</td>
-            <td th:text="${user.role}">USER</td>
+            <td th:text="${user.role}">PARTISIPANT</td>
             <td><form th:action="@{'/admin/edit/' + ${user.id}}" method="get" style="display:inline;">
                   <button type="submit">Edit</button>
                 </form>

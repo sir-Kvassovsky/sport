@@ -5,7 +5,6 @@ import edu.khlep.model.AppUser;
 import edu.khlep.repository.UserRepository;
 import edu.khlep.service.UserService;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.autoconfigure.security.reactive.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -31,7 +30,6 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
-            // ignore these static‐resource paths outright
             .requestMatchers(
                 "/css/**",
                 "/js/**",
@@ -55,7 +53,10 @@ public class SecurityConfig {
 
            
                 .requestMatchers("/user/**")
-                    .hasRole("USER")
+                    .hasRole("PARTICIPANT")
+
+                .requestMatchers("/user/**")
+                    .hasRole("MANAGER")
 
            
                 .requestMatchers("/admin/**")
@@ -63,7 +64,7 @@ public class SecurityConfig {
 
            
                 .anyRequest()
-                    .hasAnyRole("USER", "ADMIN")
+                    .hasAnyRole("PARTICIPANT", "ADMIN", "MANAGER")
             )
 
             
