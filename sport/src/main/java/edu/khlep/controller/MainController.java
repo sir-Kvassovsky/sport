@@ -14,11 +14,11 @@ public class MainController {
     
     @GetMapping("/main")
     public String Main(Model model) {
-        return "main";
+        return "guest/main";
     }
 
     @GetMapping("/about")
     public String aboutAuthor(Model model){
-        return "about";
+        return "guest/about";
     }
 }

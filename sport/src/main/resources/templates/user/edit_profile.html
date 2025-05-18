@@ -9,15 +9,14 @@
   <button id="darkToggle">🌙</button>
 
   <h2>Edit profile</h2>
-  <form th:action="@{/profile/update}" th:object="${user}" method="post" id="editProfileForm">
+  <form th:action="@{/profile/update}" th:object="${user}" method="post">
     <input type="hidden" th:field="*{id}" />
     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
     <input type="text"     id="username"   th:field="*{username}"  placeholder="Username"   required/>
     <input type="text"     id="firstName"  th:field="*{firstName}" placeholder="First name"  required/>
     <input type="text"     id="lastName"   th:field="*{lastName}"  placeholder="Last name"   required/>
     <input type="number"   id="birthYear"  th:field="*{birthYear}" placeholder="Birth year"  required/>
-    <input type="password" id="password"   th:field="*{password}"  placeholder="Password"    required/>  
-    <input type="password" id="confirmPassword"                 placeholder="Confirm password" required/>
+    <input type="hidden"  th:field="*{password}"/>  
     <div style="width: 200px; margin: 10px auto;">
       <select th:field="*{role}" required style="width: 100%; padding: 8px; font-size: 14px;">
         <option value="PARTICIPANT">Participant</option>
@@ -26,23 +25,6 @@
     </div>
     <button type="submit">Update profile</button>
   </form>
-  <script>
-    window.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('password').value = '';
-        document.getElementById('confirmPassword').value = '';
-    });
-    document.getElementById('editProfileForm').addEventListener('submit', e => {
-      if (document.getElementById('password').value !== document.getElementById('confirmPassword').value) {
-        e.preventDefault();
-        alert('Passwords do not match');
-      }
-    });
-    
-    document.querySelector('.back-link a').addEventListener('click', () => {
-        document.getElementById('password').value = '';
-        document.getElementById('confirmPassword').value = '';
-    });
-  </script>
   <div class="back-link">
     <p><a th:href="@{/profile}">Back to profile</a></p>
   </div>

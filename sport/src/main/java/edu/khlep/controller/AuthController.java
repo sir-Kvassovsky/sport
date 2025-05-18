@@ -20,7 +20,7 @@ public class AuthController {
     @GetMapping("/sign-up")
     public String showRegistrationForm(Model model) {
         model.addAttribute("user", new AppUser());
-        return "sign-up";
+        return "auth/sign-up";
     }
     
     @PostMapping("/sign-up")
@@ -28,12 +28,13 @@ public class AuthController {
         try {
             userService.SignUpNewUser(user);
         } catch (Exception e) {
-            return "sign-up";
+            return "auth/sign-up";
         }
         return "redirect:/login?sign-uped";
     }
+    
     @GetMapping("/login")
     public String login() {
-        return "login"; 
+        return "auth/login"; 
     }
 }

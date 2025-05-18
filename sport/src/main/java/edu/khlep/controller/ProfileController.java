@@ -28,23 +28,35 @@ public class ProfileController {
             return "redirect:/login";
         }
         model.addAttribute("user", cuser);
-        return "profile";   
+        return "user/profile";   
     }
     @GetMapping("/update")
     public String showEditProfile(Model model) {
         AppUser cuser = userService.getCurrentUser();
         model.addAttribute("user", cuser);
-        return "edit_profile";
+        return "user/edit_profile";
     }
 
     @PostMapping("/update")
     public String updateProfile(@ModelAttribute("user") AppUser formUser) {
+        userService.updateUser(formUser);
+        return "redirect:/profile?success";
+    }
+    @GetMapping("/update_password")
+    public String showEditPassword(Model model) {
+        AppUser cuser = userService.getCurrentUser();
+        model.addAttribute("user", cuser);
+        return "user/edit_password";
+    }
+
+    @PostMapping("/update_password")
+    public String updatePassword(@ModelAttribute("user") AppUser formUser) {
         AppUser existing = userService.findById(formUser.getId());
-        existing.setUsername(formUser.getUsername());
-        if (formUser.getPassword() != null && !formUser.getPassword().isBlank()) {
-            existing.setPassword(passwordEncoder.encode(formUser.getPassword()));
+        String raw = formUser.getPassword();
+        if (raw != null && !raw.isBlank()) {
+            existing.setPassword(passwordEncoder.encode(raw));
+            userService.updateUser(existing);
         }
-        userService.updateUser(existing);
         return "redirect:/profile?success";
     }
     

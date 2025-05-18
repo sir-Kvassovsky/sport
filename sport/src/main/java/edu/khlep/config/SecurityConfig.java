@@ -43,12 +43,14 @@ public class SecurityConfig {
         http            
             .authorizeHttpRequests(authorize -> authorize 
                 .requestMatchers(
-                    "/",                
-                    "/public/**",       
+                    "/",       
                     "/login",
                     "/sign-up",
                     "/error",
-                    "/main"
+                    "/main",
+                    "/guest",
+                    "/auth",
+                    "/about"
                 ).permitAll()
 
            
@@ -66,7 +68,6 @@ public class SecurityConfig {
                 .anyRequest()
                     .hasAnyRole("PARTICIPANT", "ADMIN", "MANAGER")
             )
-
             
             .formLogin(form -> form
                 .loginPage("/login")
@@ -80,7 +81,6 @@ public class SecurityConfig {
                 .permitAll()
             )
 
-            
             .authenticationProvider(authenticationProvider());
 
         return http.build();
