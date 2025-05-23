@@ -138,9 +138,18 @@ public class Event {
     }
 
     public enum EventStatus {
-        active_registration,
-        registration_closed,
-        archived
+        active_registration("Active Registration"),
+        registration_closed  ("Registration Closed"),
+        archived             ("Archived");
+
+        private final String displayName;
+        EventStatus(String displayName) {
+            this.displayName = displayName;
+        }
+        public String getDisplayName() {
+            return displayName;
+        }
     }
+
 }
 

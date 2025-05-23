@@ -1,7 +1,16 @@
+/home/sirk/Documents/git/sport/sport/src/main/java/edu/khlep/service/EventService.java
+/home/sirk/Documents/git/sport/sport/src/main/java/edu/khlep/controller/EventController.java
 /home/sirk/Documents/git/sport/sport/src/main/java/edu/khlep/model/AppUser.java
 /home/sirk/Documents/git/sport/sport/src/main/java/edu/khlep/service/UserService.java
-/home/sirk/Documents/git/sport/sport/src/main/java/edu/khlep/config/PasswordConfig.java
 /home/sirk/Documents/git/sport/sport/src/main/java/edu/khlep/App.java
+/home/sirk/Documents/git/sport/sport/src/main/java/edu/khlep/repository/SportEventRepository.java
 /home/sirk/Documents/git/sport/sport/src/main/java/edu/khlep/repository/UserRepository.java
 /home/sirk/Documents/git/sport/sport/src/main/java/edu/khlep/config/SecurityConfig.java
+/home/sirk/Documents/git/sport/sport/src/main/java/edu/khlep/model/Event.java
+/home/sirk/Documents/git/sport/sport/src/main/java/edu/khlep/config/PasswordConfig.java
+/home/sirk/Documents/git/sport/sport/src/main/java/edu/khlep/model/EventParticipant.java
+/home/sirk/Documents/git/sport/sport/src/main/java/edu/khlep/controller/AuthController.java
+/home/sirk/Documents/git/sport/sport/src/main/java/edu/khlep/controller/AdminController.java
+/home/sirk/Documents/git/sport/sport/src/main/java/edu/khlep/repository/UserSportRepository.java
+/home/sirk/Documents/git/sport/sport/src/main/java/edu/khlep/controller/ProfileController.java
 /home/sirk/Documents/git/sport/sport/src/main/java/edu/khlep/controller/MainController.java

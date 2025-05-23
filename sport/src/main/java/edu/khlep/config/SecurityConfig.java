@@ -48,7 +48,7 @@ public class SecurityConfig {
                     "/sign-up",
                     "/error",
                     "/main",
-                    "/guest",
+                    "/event/**",
                     "/auth",
                     "/about"
                 ).permitAll()

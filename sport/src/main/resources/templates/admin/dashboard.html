@@ -45,7 +45,7 @@
             <td th:text="${user.lastName}">Doe</td>
             <td th:text="${user.firstName}">John</td>
             <td th:text="${user.birthYear}">1980</td>
-            <td th:text="${user.role}">PARTISIPANT</td>
+            <td th:text="${#strings.capitalize(user.role.toLowerCase())}">PARTISIPANT</td>
             <td>
               <form th:action="@{/admin/edit/{id}(id=${user.id})}" method="get" style="display:inline;"
                     th:if="${user.id != 1}">
