@@ -5,6 +5,9 @@ import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+import edu.khlep.model.Event.EventStatus;
+import edu.khlep.model.Event.EventVenueType;
+
 @Entity
 @Table(name = "events")
 public class Event {
@@ -36,8 +39,9 @@ public class Event {
     private OffsetDateTime endsAt;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private EventStatus status = EventStatus.ACTIVE_REGISTRATION;
+    @Column(name = "status",     nullable = false)
+    private EventStatus status;
+
 
     @Column(name = "current_participants_count", nullable = false)
     private Integer currentParticipantsCount = 0;
@@ -127,15 +131,16 @@ public class Event {
                '}';
     }
 
+
     public enum EventVenueType {
-        INDOORS,
-        OUTDOORS
+        indoors,
+        outdoors
     }
 
     public enum EventStatus {
-        ACTIVE_REGISTRATION,
-        REGISTRATION_CLOSED,
-        ARCHIVED
+        active_registration,
+        registration_closed,
+        archived
     }
 }
 

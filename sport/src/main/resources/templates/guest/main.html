@@ -30,21 +30,51 @@
     </div>
   </header>
 
-  <main>
-    <h2>Data Table</h2>
-    <table>
-      <thead>
-        <tr><th>ID</th><th>Name</th><th>Value</th></tr>
-      </thead>
-      <tbody>
-        <!-- <tr th:each="item : ${items}">
-          <td th:text="${item.id}"></td>
-          <td th:text="${item.name}"></td>
-          <td th:text="${item.value}"></td>
-        </tr> -->
-      </tbody>
-    </table>
-  </main>
+<main>
+  <h2>Sport Events</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Place</th>
+        <th>Venue</th>
+        <th>Participants</th>
+        <th>Starts</th>
+        <th>Ends</th>
+        <th>Status</th>
+        <th sec:authorize="hasRole('ROLE_PARTICIPANT')">Participate</th> <!-- action column -->
+        <th></th> <!-- extra placeholder -->
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="event : ${events}">
+        <td th:text="${event.name}"></td>
+        <td th:text="${event.place}"></td>
+        <td th:text="${event.venueType}"></td>
+        <td th:text="${event.currentParticipantsCount} + ' / ' + ${event.maxParticipants}"></td>
+        <!-- <td th:text="${#dates.format(event.startsAt, 'yyyy-MM-dd HH:mm')}"></td>
+        <td th:text="${#dates.format(event.endsAt,   'yyyy-MM-dd HH:mm')}"></td> -->
+        <td th:text="${event.status}"></td>
+
+        <td sec:authorize="hasRole('ROLE_PARTICIPANT')">
+          <form th:if="${!subscribedEventIds.contains(event.id)}"
+                th:action="@{/events/subscribe/{id}(id=${event.id})}"
+                method="post" style="display:inline">
+            <button type="submit">Subscribe</button>
+          </form>
+
+          <form th:if="${subscribedEventIds.contains(event.id)}"
+                th:action="@{/events/unsubscribe/{id}(id=${event.id})}"
+                method="post" style="display:inline">
+            <button type="submit">Unsubscribe</button>
+          </form>
+        </td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</main>
+
 
 </body>
 </html>
