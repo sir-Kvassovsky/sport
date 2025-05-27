@@ -1,7 +1,9 @@
 package edu.khlep.service;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,9 +70,11 @@ public class EventService {
 
         participantRepo.save(new EventParticipant(event, user));
 
-        // Считаем количество участников точно по базе
         long count = participantRepo.countByEvent(event);
         event.setCurrentParticipantsCount((int) count);
+        if (count >= event.getMaxParticipants()) {
+            event.setStatus(Event.EventStatus.registration_closed);
+        }
         eventRepo.save(event);
     }
 
@@ -86,9 +90,9 @@ public class EventService {
 
         participantRepo.deleteById(id);
 
-        // Считаем количество участников точно по базе
         long count = participantRepo.countByEvent(event);
         event.setCurrentParticipantsCount((int) count);
+        event.setStatus(Event.EventStatus.active_registration);
         eventRepo.save(event);
     }
 
@@ -100,4 +104,30 @@ public class EventService {
                             .map(EventParticipant::getEvent)
                             .toList();
     }
+
+    @Scheduled(cron = "0 */5 * * * *")   // every hour on the hour
+    @Transactional
+    public void closeEvents24HoursBeforeStart() {
+        OffsetDateTime cutoff = OffsetDateTime.now().plusHours(24);
+        List<Event> aboutToStart  = eventRepo.findByStatusAndStartsAtBefore(
+            Event.EventStatus.active_registration, cutoff);
+
+        for (Event e : aboutToStart) {
+            e.setStatus(Event.EventStatus.registration_closed);
+            eventRepo.save(e);
+        }
+    }
+
+    @Scheduled(cron = "0 0 * * * *")
+    @Transactional
+    public void archivePastEvents() {
+        OffsetDateTime now = OffsetDateTime.now();
+        List<Event> finished = eventRepo.findByStatusNotAndEndsAtBefore(
+            Event.EventStatus.archived, now);
+        for (Event e : finished) {
+            e.setStatus(Event.EventStatus.archived);
+            eventRepo.save(e);
+        }
+    }
+
 }

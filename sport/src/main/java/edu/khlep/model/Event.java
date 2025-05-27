@@ -151,5 +151,13 @@ public class Event {
         }
     }
 
+
+    public Boolean IsOpen() {
+        if (status != EventStatus.active_registration) {
+            return false;
+        }
+        return true;
+    }
+
 }
 

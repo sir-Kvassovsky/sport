@@ -55,11 +55,13 @@
         <td th:text="${event.venueType}"></td>
         <td th:text="${event.currentParticipantsCount} + ' / ' + ${event.maxParticipants}"></td>
         <td th:text="${event.status.displayName}"></td>
-        <td th:text="${#temporals.format(event.startsAt, 'yyyy-MM-dd HH:mm')}"></td>
-        <td th:text="${#temporals.format(event.endsAt,   'yyyy-MM-dd HH:mm')}"></td>
+        <td><span th:text="${#temporals.format(event.startsAt.atZoneSameInstant(T(java.time.ZoneId).of('Europe/Moscow')), 'yyyy-MM-dd HH:mm')}"></span>
+        </td>
+        <td><span th:text="${#temporals.format(event.endsAt.atZoneSameInstant(T(java.time.ZoneId).of('Europe/Moscow')), 'yyyy-MM-dd HH:mm')}"></span>
+        </td>
 
         <td sec:authorize="hasRole('ROLE_PARTICIPANT')">
-          <form th:if="${!subscribedEventIds.contains(event.id)}"
+          <form th:if="${!subscribedEventIds.contains(event.id) and event.IsOpen}"
                 th:action="@{/events/subscribe/{id}(id=${event.id})}"
                 method="post" style="display:inline">
             <button type="submit">Subscribe</button>
@@ -72,10 +74,10 @@
           </form>
         </td>
         <td sec:authorize="hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')">
-          <form th:action="@{/event/edit/{id}(id=${event.id})}" method="get" style="display:inline;">
+          <form th:action="@{/manager/edit/{id}(id=${event.id})}" method="get" style="display:inline;">
             <button type="submit">Edit</button>
           </form>
-          <form th:action="@{/event/delete/{id}(id=${event.id})}" method="post" style="display:inline;">
+          <form th:action="@{/manager/delete/{id}(id=${event.id})}" method="post" style="display:inline;">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
             <button type="submit" onclick="return confirm('Are you sure?');">Delete</button>
           </form>

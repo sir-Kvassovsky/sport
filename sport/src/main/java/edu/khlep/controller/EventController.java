@@ -50,4 +50,5 @@ public class EventController {
         }
         return "event/my_events"; 
     }
+    
 }
