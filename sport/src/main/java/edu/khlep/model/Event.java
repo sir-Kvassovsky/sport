@@ -152,7 +152,7 @@ public class Event {
     }
 
 
-    public Boolean IsOpen() {
+    public Boolean isOpen() {
         if (status != EventStatus.active_registration) {
             return false;
         }

@@ -8,7 +8,9 @@
 </head>
 <body>
   <div class="tabs">
-    <a th:href="@{/}"      class="tab" th:classappend="${activeTab=='home'} ? ' active' : ''">Home</a>
+    <a th:href="@{/main}" class="tab" th:classappend="${tab == 'main'} ? 'active-tab' : ''">Active Events</a> 
+    <a sec:authorize="!hasRole('ROLE_ANONYMOUS')" 
+        th:href="@{/archive}" class="tab" th:classappend="${tab == 'archive'} ? 'active-tab' : ''">Archived Events</a>
     <a th:href="@{/about}" class="tab" th:classappend="${activeTab=='about'} ? ' active' : ''">About the Author</a>
   </div>
 
@@ -17,9 +19,6 @@
     <div style="margin-left: 20px;">
       <div>
         <a th:href="@{/logout}">Logout</a>
-      </div>
-      <div>
-        <a th:href="@{/main}">Main page</a>
       </div>
     </div>
   </header>

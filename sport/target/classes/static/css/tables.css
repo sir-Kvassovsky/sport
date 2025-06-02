@@ -14,6 +14,26 @@ body {
   color: #f1f1f1;
 }
 
+.sort-header {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  text-decoration: none;
+  color: black;
+  user-select: none;
+}
+
+.sort-header:hover {
+  background-color: #ddd;
+}
+
+.active-sort {
+  background-color: #ccc;
+  font-weight: bold;
+}
+
 header {
   position: fixed;
   top: 0;

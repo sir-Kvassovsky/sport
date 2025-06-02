@@ -11,4 +11,5 @@ public interface SportEventRepository extends JpaRepository<Event, Long> {
     Optional<Event> findByName(String name);
     List<Event> findByStatusAndStartsAtBefore(Event.EventStatus status, OffsetDateTime dateTime);
     List<Event> findByStatusNotAndEndsAtBefore(Event.EventStatus status, OffsetDateTime dateTime);
+    
 }

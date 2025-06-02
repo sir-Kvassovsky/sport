@@ -9,24 +9,26 @@
 </head>
 <body>
   <div class="tabs">
-    <a th:href="@{/}" class="tab" th:classappend="${activeTab=='home'} ? ' active' : ''">Home</a>
-    <a sec:authorize="hasAnyRole('PARTICIPANT','MANAGER')" 
-       th:href="@{/profile}" class="tab" 
-       th:classappend="${activeTab=='profile'} ? ' active' : ''">
-      Profile
-    </a>
+    <a th:href="@{/main}" class="tab" th:classappend="${tab == 'main'} ? 'active-tab' : ''">Active Events</a> 
+    <a sec:authorize="!hasRole('ROLE_ANONYMOUS')" 
+        th:href="@{/archive}" class="tab" th:classappend="${tab == 'archive'} ? 'active-tab' : ''">Archived Events</a>
+    <a sec:authorize="hasRole('ROLE_PARTICIPANT') or hasRole('ROLE_MANAGER')" 
+        th:href="@{/profile}" class="tab" th:classappend="${activeTab=='profile'} ? ' active' : ''">Profile</a>
     <a th:href="@{/about}" class="tab" th:classappend="${activeTab=='about'} ? ' active' : ''">About the Author</a>
   </div>
 
   <header>
     <button id="darkToggle">🌙</button>
     <div style="margin-left: 20px;">
-      <div sec:authorize="isAnonymous()">
+      <div sec:authorize="hasRole('ROLE_ANONYMOUS')">
         <a th:href="@{/login}">Login</a> /
         <a th:href="@{/sign-up}">Sign Up</a>
       </div>
-      <div sec:authorize="hasAnyRole('PARTICIPANT','MANAGER')">
+      <div sec:authorize="hasRole('ROLE_PARTICIPANT') or hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')">
         <a th:href="@{/logout}">Logout</a>
+      </div>
+      <div sec:authorize="hasRole('ROLE_ADMIN')">
+        <a th:href="@{/admin/dashboard}">Admin Panel</a>
       </div>
     </div>
   </header>

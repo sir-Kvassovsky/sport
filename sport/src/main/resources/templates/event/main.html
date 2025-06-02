@@ -9,8 +9,11 @@
 </head>
 <body>
   <div class="tabs">
-    <a th:href="@{/}" class="tab" th:classappend="${activeTab=='home'} ? ' active' : ''">Home</a>
-    <a sec:authorize="hasRole('ROLE_PARTICIPANT') or hasRole('ROLE_MANAGER')" th:href="@{/profile}" class="tab" th:classappend="${activeTab=='profile'} ? ' active' : ''">Profile</a>
+    <a th:href="@{/main}" class="tab" th:classappend="${tab == 'main'} ? 'active-tab' : ''">Active Events</a> 
+    <a sec:authorize="!hasRole('ROLE_ANONYMOUS')" 
+        th:href="@{/archive}" class="tab" th:classappend="${tab == 'archive'} ? 'active-tab' : ''">Archived Events</a>
+    <a sec:authorize="hasRole('ROLE_PARTICIPANT') or hasRole('ROLE_MANAGER')" 
+        th:href="@{/profile}" class="tab" th:classappend="${activeTab=='profile'} ? ' active' : ''">Profile</a>
     <a th:href="@{/about}" class="tab" th:classappend="${activeTab=='about'} ? ' active' : ''">About the Author</a>
   </div>
 
@@ -35,13 +38,54 @@
   <table>
     <thead>
       <tr>
-        <th>Name</th>
-        <th>Place</th>
-        <th>Venue</th>
-        <th>Participants</th>
-        <th>Status</th>
-        <th>Starts</th>
-        <th>Ends</th>
+        <th>
+          <a th:href="@{/main(page=${currentPage}, sort='name', dir=${sort == 'name' and dir == 'asc' ? 'desc' : 'asc'})}"
+             th:class="'sort-header ' + (${sort == 'name'} ? 'active-sort' : '')">
+            Name <span th:if="${sort == 'name'}" th:text="${dir == 'asc' ? '↑' : '↓'}"></span>
+          </a>
+        </th>
+  
+        <th>
+          <a th:href="@{/main(page=${currentPage}, sort='place', dir=${sort == 'place' and dir == 'asc' ? 'desc' : 'asc'})}"
+             th:class="'sort-header ' + (${sort == 'place'} ? 'active-sort' : '')">
+            Location <span th:if="${sort == 'place'}" th:text="${dir == 'asc' ? '↑' : '↓'}"></span>
+          </a>
+        </th>
+  
+        <th>
+          <a th:href="@{/main(page=${currentPage}, sort='venueType', dir=${sort == 'venueType' and dir == 'asc' ? 'desc' : 'asc'})}"
+             th:class="'sort-header ' + (${sort == 'venueType'} ? 'active-sort' : '')">
+            Venue Type <span th:if="${sort == 'venueType'}" th:text="${dir == 'asc' ? '↑' : '↓'}"></span>
+          </a>
+        </th>
+  
+        <th>
+          <a th:href="@{/main(page=${currentPage}, sort='currentParticipantsCount', dir=${sort == 'currentParticipantsCount' and dir == 'asc' ? 'desc' : 'asc'})}"
+             th:class="'sort-header ' + (${sort == 'currentParticipantsCount'} ? 'active-sort' : '')">
+            Participants <span th:if="${sort == 'currentParticipantsCount'}" th:text="${dir == 'asc' ? '↑' : '↓'}"></span>
+          </a>
+        </th>
+  
+        <th>
+          <a th:href="@{/main(page=${currentPage}, sort='status', dir=${sort == 'status' and dir == 'asc' ? 'desc' : 'asc'})}"
+             th:class="'sort-header ' + (${sort == 'status'} ? 'active-sort' : '')">
+            Status <span th:if="${sort == 'status'}" th:text="${dir == 'asc' ? '↑' : '↓'}"></span>
+          </a>
+        </th>
+  
+        <th>
+          <a th:href="@{/main(page=${currentPage}, sort='startsAt', dir=${sort == 'startsAt' and dir == 'asc' ? 'desc' : 'asc'})}"
+             th:class="'sort-header ' + (${sort == 'startsAt'} ? 'active-sort' : '')">
+            Starts <span th:if="${sort == 'startsAt'}" th:text="${dir == 'asc' ? '↑' : '↓'}"></span>
+          </a>
+        </th>
+  
+        <th>
+          <a th:href="@{/main(page=${currentPage}, sort='endsAt', dir=${sort == 'endsAt' and dir == 'asc' ? 'desc' : 'asc'})}"
+             th:class="'sort-header ' + (${sort == 'endsAt'} ? 'active-sort' : '')">
+            Ends <span th:if="${sort == 'endsAt'}" th:text="${dir == 'asc' ? '↑' : '↓'}"></span>
+          </a>
+        </th>
         <th sec:authorize="hasRole('ROLE_PARTICIPANT')">Participate</th> 
         <th sec:authorize="hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')">Actions</th> 
       </tr>
@@ -61,7 +105,7 @@
         </td>
 
         <td sec:authorize="hasRole('ROLE_PARTICIPANT')">
-          <form th:if="${!subscribedEventIds.contains(event.id) and event.IsOpen}"
+          <form th:if="${!subscribedEventIds.contains(event.id) and event.open}"
                 th:action="@{/events/subscribe/{id}(id=${event.id})}"
                 method="post" style="display:inline">
             <button type="submit">Subscribe</button>

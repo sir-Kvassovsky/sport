@@ -3,6 +3,7 @@ package edu.khlep.service;
 import java.time.OffsetDateTime;
 import java.util.List;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,9 +39,10 @@ public class EventService {
             () -> new RuntimeException("Event not found"));
     }
 
-    public List<Event> listAllEvents() {
-        return eventRepo.findAll();
+    public List<Event> listAllEvents(Sort sort) {
+        return eventRepo.findAll(sort);
     }
+
 
     public Event updateEvent(Event e) {
         return eventRepo.save(e);
@@ -105,7 +107,7 @@ public class EventService {
                             .toList();
     }
 
-    @Scheduled(cron = "0 */5 * * * *")   // every hour on the hour
+    @Scheduled(cron = "0 */5 * * * *") 
     @Transactional
     public void closeEvents24HoursBeforeStart() {
         OffsetDateTime cutoff = OffsetDateTime.now().plusHours(24);
