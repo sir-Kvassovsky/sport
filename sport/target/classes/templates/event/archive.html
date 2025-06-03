@@ -86,7 +86,6 @@
             Ends <span th:if="${sort == 'endsAt'}" th:text="${dir == 'asc' ? '↑' : '↓'}"></span>
           </a>
         </th>
-        <!-- <th sec:authorize="hasRole('ROLE_PARTICIPANT')">Participate</th>  -->
         <th sec:authorize="hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')">Actions</th> 
       </tr>
     </thead>
@@ -104,23 +103,7 @@
         <td><span th:text="${#temporals.format(event.endsAt.atZoneSameInstant(T(java.time.ZoneId).of('Europe/Moscow')), 'yyyy-MM-dd HH:mm')}"></span>
         </td>
 
-        <!-- <td sec:authorize="hasRole('ROLE_PARTICIPANT')">
-          <form th:if="${!subscribedEventIds.contains(event.id) and event.open}"
-                th:action="@{/events/subscribe/{id}(id=${event.id})}"
-                method="post" style="display:inline">
-            <button type="submit">Subscribe</button>
-          </form>
-
-          <form th:if="${subscribedEventIds.contains(event.id)}"
-                th:action="@{/events/unsubscribe/{id}(id=${event.id})}"
-                method="post" style="display:inline">
-            <button type="submit">Unsubscribe</button>
-          </form>
-        </td> -->
-        <td sec:authorize="hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')">
-          <!-- <form th:action="@{/manager/edit/{id}(id=${event.id})}" method="get" style="display:inline;">
-            <button type="submit">Edit</button>
-          </form> -->
+        <td sec:authorize="hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')">3
           <form th:action="@{/manager/delete/{id}(id=${event.id})}" method="post" style="display:inline;">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
             <button type="submit" onclick="return confirm('Are you sure?');">Delete</button>
