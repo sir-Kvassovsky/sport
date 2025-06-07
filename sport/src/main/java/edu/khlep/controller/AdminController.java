@@ -53,13 +53,23 @@ public class AdminController {
     @PostMapping("/edit")
     public String updateUser(@ModelAttribute("user") AppUser cuser) {
         AppUser existing = service.findById(cuser.getId());
+        service.updateUser(cuser);
+        return "redirect:/admin/dashboard";
+    }
+    @GetMapping("/edit/admin/password/{id}")
+    public String editPassordForm(@PathVariable Long id, Model model) {
+        AppUser user = service.findById(id);
+        model.addAttribute("user", user);
+        return "admin/password";
+    }
+    
+    @PostMapping("/edit/admin/password")
+    public String updateUserPassword(@ModelAttribute("user") AppUser cuser) {
+        AppUser existing = service.findById(cuser.getId());
         String raw = cuser.getPassword();
         if (raw != null && !raw.isBlank()) {
             existing.setPassword(passwordEncoder.encode(raw));
             service.updateUser(existing);
-        }
-        else{
-            service.updateUser(cuser);
         }
         return "redirect:/admin/dashboard";
     }
