@@ -1,10 +1,13 @@
 package edu.khlep.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import edu.khlep.model.AppUser;
+import edu.khlep.service.EventService;
 import edu.khlep.service.UserService;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,15 +19,28 @@ public class AdminController {
     private UserService service;
     private final PasswordEncoder passwordEncoder;
 
-    public AdminController(UserService service, PasswordEncoder passwordEncoder) {
+    public AdminController(UserService service, EventService eventService, PasswordEncoder passwordEncoder) {
         this.service = service;
         this.passwordEncoder = passwordEncoder;
     }
 
+
     @GetMapping("/dashboard")
-    public String dashboard(Model model){
-        List<AppUser> users = service.findAll();
+    public String dashboard(
+            @RequestParam(defaultValue = "id") String sort,
+            @RequestParam(defaultValue = "asc") String dir,
+            Model model) {
+
+        Sort sortObj = dir.equals("asc") ? Sort.by(sort).ascending() : Sort.by(sort).descending();
+            List<AppUser> users = service.listAllUsers(sortObj)
+            .stream()
+            .collect(Collectors.toList());
+
+        model.addAttribute("tab", "dashboard");
         model.addAttribute("users", users); 
+        model.addAttribute("sort", sort);
+        model.addAttribute("dir", dir);
+
         return "admin/dashboard";
     }
     @GetMapping("/edit/{id}")

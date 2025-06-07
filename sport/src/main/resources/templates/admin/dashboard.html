@@ -8,10 +8,14 @@
 </head>
 <body>
   <div class="tabs">
-    <a th:href="@{/main}" class="tab" th:classappend="${tab == 'main'} ? 'active-tab' : ''">Active Events</a> 
-    <a sec:authorize="!hasRole('ROLE_ANONYMOUS')" 
-        th:href="@{/archive}" class="tab" th:classappend="${tab == 'archive'} ? 'active-tab' : ''">Archived Events</a>
-    <a th:href="@{/about}" class="tab" th:classappend="${activeTab=='about'} ? ' active' : ''">About the Author</a>
+    <a th:href="@{/main}" class="tab" th:classappend="${tab == 'main'} ? 'active-tab' : ''">Active Events</a>
+    <a sec:authorize="!hasRole('ROLE_ANONYMOUS')"
+       th:href="@{/archive}" class="tab" th:classappend="${tab == 'archive'} ? 'active-tab' : ''">Archived Events</a>
+    <a sec:authorize="!hasRole('ROLE_ANONYMOUS')"
+        th:href="@{/search}" class="tab" th:classappend="${tab == 'search'} ? 'active-tab' : ''">Search Events</a>
+    <a sec:authorize="hasRole('ROLE_PARTICIPANT') or hasRole('ROLE_MANAGER')"
+       th:href="@{/profile}" class="tab" th:classappend="${activeTab=='profile'} ? 'active-tab' : ''">Profile</a>
+    <a th:href="@{/about}" class="tab" th:classappend="${activeTab=='about'} ? 'active-tab' : ''">About the Author</a>
   </div>
 
   <header>
@@ -26,17 +30,48 @@
   <main>
     <h2>User Table</h2>
     <table>
-        <thead>
-          <tr>
-            <th>Id</th>
-            <th>Username</th>
-            <th>Last Name</th>
-            <th>First Name</th>
-            <th>Birth Year</th>
-            <th>Role</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
+    <thead>
+      <tr>
+        <th>
+          <a th:href="@{/admin/dashboard(page=${currentPage}, sort='id', dir=${sort == 'id' and dir == 'asc' ? 'desc' : 'asc'})}"
+            th:class="'sort-header ' + (${sort == 'id'} ? 'active-sort' : '')">
+            Id <span th:if="${sort == 'id'}" th:text="${dir == 'asc' ? '↑' : '↓'}"></span>
+          </a>
+        </th>
+        <th>
+          <a th:href="@{/admin/dashboard(page=${currentPage}, sort='username', dir=${sort == 'username' and dir == 'asc' ? 'desc' : 'asc'})}"
+            th:class="'sort-header ' + (${sort == 'username'} ? 'active-sort' : '')">
+            Username <span th:if="${sort == 'username'}" th:text="${dir == 'asc' ? '↑' : '↓'}"></span>
+          </a>
+        </th>
+        <th>
+          <a th:href="@{/admin/dashboard(page=${currentPage}, sort='lastName', dir=${sort == 'lastName' and dir == 'asc' ? 'desc' : 'asc'})}"
+            th:class="'sort-header ' + (${sort == 'lastName'} ? 'active-sort' : '')">
+            Last Name <span th:if="${sort == 'lastName'}" th:text="${dir == 'asc' ? '↑' : '↓'}"></span>
+          </a>
+        </th>
+        <th>
+          <a th:href="@{/admin/dashboard(page=${currentPage}, sort='firstName', dir=${sort == 'firstName' and dir == 'asc' ? 'desc' : 'asc'})}"
+            th:class="'sort-header ' + (${sort == 'firstName'} ? 'active-sort' : '')">
+            First Name <span th:if="${sort == 'firstName'}" th:text="${dir == 'asc' ? '↑' : '↓'}"></span>
+          </a>
+        </th>
+        <th>
+          <a th:href="@{/admin/dashboard(page=${currentPage}, sort='birthYear', dir=${sort == 'birthYear' and dir == 'asc' ? 'desc' : 'asc'})}"
+            th:class="'sort-header ' + (${sort == 'birthYear'} ? 'active-sort' : '')">
+            Birth Year <span th:if="${sort == 'birthYear'}" th:text="${dir == 'asc' ? '↑' : '↓'}"></span>
+          </a>
+        </th>
+        <th>
+          <a th:href="@{/admin/dashboard(page=${currentPage}, sort='role', dir=${sort == 'role' and dir == 'asc' ? 'desc' : 'asc'})}"
+            th:class="'sort-header ' + (${sort == 'role'} ? 'active-sort' : '')">
+            Role <span th:if="${sort == 'role'}" th:text="${dir == 'asc' ? '↑' : '↓'}"></span>
+          </a>
+        </th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
         <tbody>
           <tr th:each="user : ${users}">
             <td th:text="${user.id}">id</td>

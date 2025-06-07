@@ -1,5 +1,7 @@
 package edu.khlep.controller;
 
+import java.util.List;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,16 +11,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import edu.khlep.model.AppUser;
+import edu.khlep.model.Event;
+import edu.khlep.service.EventService;
 import edu.khlep.service.UserService;
 
 @Controller
 @RequestMapping("/profile")
 public class ProfileController {
     private final UserService userService;
+    private final EventService eventService;
     private final PasswordEncoder passwordEncoder;
-    public ProfileController(UserService userService,
-                             PasswordEncoder passwordEncoder) {
+    public ProfileController(UserService userService, 
+                             PasswordEncoder passwordEncoder, EventService eventService) {
         this.userService = userService;
+        this.eventService = eventService;
         this.passwordEncoder = passwordEncoder;
     }
     @GetMapping
@@ -28,6 +34,8 @@ public class ProfileController {
             return "redirect:/login";
         }
         model.addAttribute("user", cuser);
+        List<Event> subscribedEvents = eventService.getEventsForCurrentUser();
+        model.addAttribute("subscribedEvents", subscribedEvents);
         return "user/profile";   
     }
     @GetMapping("/update")

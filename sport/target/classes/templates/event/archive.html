@@ -9,12 +9,14 @@
 </head>
 <body>
   <div class="tabs">
-    <a th:href="@{/main}" class="tab" th:classappend="${tab == 'main'} ? 'active-tab' : ''">Active Events</a> 
-    <a sec:authorize="!hasRole('ROLE_ANONYMOUS')" 
-        th:href="@{/archive}" class="tab" th:classappend="${tab == 'archive'} ? 'active-tab' : ''">Archived Events</a>
-    <a sec:authorize="hasRole('ROLE_PARTICIPANT') or hasRole('ROLE_MANAGER')" 
-        th:href="@{/profile}" class="tab" th:classappend="${activeTab=='profile'} ? ' active' : ''">Profile</a>
-    <a th:href="@{/about}" class="tab" th:classappend="${activeTab=='about'} ? ' active' : ''">About the Author</a>
+    <a th:href="@{/main}" class="tab" th:classappend="${tab == 'main'} ? 'active-tab' : ''">Active Events</a>
+    <a sec:authorize="!hasRole('ROLE_ANONYMOUS')"
+       th:href="@{/archive}" class="tab" th:classappend="${tab == 'archive'} ? 'active-tab' : ''">Archived Events</a>
+    <a sec:authorize="!hasRole('ROLE_ANONYMOUS')"
+        th:href="@{/search}" class="tab" th:classappend="${tab == 'search'} ? 'active-tab' : ''">Search Events</a>
+    <a sec:authorize="hasRole('ROLE_PARTICIPANT') or hasRole('ROLE_MANAGER')"
+       th:href="@{/profile}" class="tab" th:classappend="${activeTab=='profile'} ? 'active-tab' : ''">Profile</a>
+    <a th:href="@{/about}" class="tab" th:classappend="${activeTab=='about'} ? 'active-tab' : ''">About the Author</a>
   </div>
 
   <header>
@@ -103,7 +105,7 @@
         <td><span th:text="${#temporals.format(event.endsAt.atZoneSameInstant(T(java.time.ZoneId).of('Europe/Moscow')), 'yyyy-MM-dd HH:mm')}"></span>
         </td>
 
-        <td sec:authorize="hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')">3
+        <td sec:authorize="hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')">
           <form th:action="@{/manager/delete/{id}(id=${event.id})}" method="post" style="display:inline;">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
             <button type="submit" onclick="return confirm('Are you sure?');">Delete</button>

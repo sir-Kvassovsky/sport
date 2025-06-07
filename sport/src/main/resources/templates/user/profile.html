@@ -9,15 +9,20 @@
 </head>
 <body>
   <div class="tabs">
-    <a th:href="@{/main}" class="tab" th:classappend="${tab == 'main'} ? 'active-tab' : ''">Active Events</a> 
-    <a sec:authorize="!hasRole('ROLE_ANONYMOUS')" 
-        th:href="@{/archive}" class="tab" th:classappend="${tab == 'archive'} ? 'active-tab' : ''">Archived Events</a>
-    <a sec:authorize="hasRole('ROLE_PARTICIPANT') or hasRole('ROLE_MANAGER')" 
-        th:href="@{/profile}" class="tab" th:classappend="${activeTab=='profile'} ? ' active' : ''">Profile</a>
-    <a th:href="@{/about}" class="tab" th:classappend="${activeTab=='about'} ? ' active' : ''">About the Author</a>
+    <a th:href="@{/main}" class="tab" th:classappend="${tab == 'main'} ? 'active-tab' : ''">Active Events</a>
+    <a sec:authorize="!hasRole('ROLE_ANONYMOUS')"
+       th:href="@{/archive}" class="tab" th:classappend="${tab == 'archive'} ? 'active-tab' : ''">Archived Events</a>
+    <a sec:authorize="!hasRole('ROLE_ANONYMOUS')"
+        th:href="@{/search}" class="tab" th:classappend="${tab == 'search'} ? 'active-tab' : ''">Search Events</a>
+    <a sec:authorize="hasRole('ROLE_PARTICIPANT') or hasRole('ROLE_MANAGER')"
+       th:href="@{/profile}" class="tab" th:classappend="${activeTab=='profile'} ? 'active-tab' : ''">Profile</a>
+    <a th:href="@{/about}" class="tab" th:classappend="${activeTab=='about'} ? 'active-tab' : ''">About the Author</a>
   </div>
 
   <header>
+    <div sec:authorize="!hasRole('ROLE_ANONYMOUS')">
+
+    </div>
     <button id="darkToggle">🌙</button>
     <div style="margin-left: 20px;">
       <div sec:authorize="hasRole('ROLE_ANONYMOUS')">
@@ -70,6 +75,38 @@
         <a th:href="@{/profile/update_password}">Change password</a>
       </div>
     </section>
+    <h3 sec:authorize="hasRole('ROLE_PARTICIPANT')">Your Subscribed Events</h3>
+    <table  sec:authorize="hasRole('ROLE_PARTICIPANT')">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Location</th>
+          <th>Starts</th>
+          <th>Ends</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="evt : ${subscribedEvents}">
+          <td><a th:href="@{/event/{id}(id=${evt.id})}" th:text="${evt.name}">Event Name</a></td>
+          <td th:text="${evt.place}">Location</td>
+          <td>
+            <span th:text="${#temporals.format(
+              evt.startsAt.atZoneSameInstant(T(java.time.ZoneId).of('Europe/Moscow')),
+              'yyyy-MM-dd HH:mm')}">Starts</span>
+          </td>
+          <td>
+            <span th:text="${#temporals.format(
+              evt.endsAt.atZoneSameInstant(T(java.time.ZoneId).of('Europe/Moscow')),
+              'yyyy-MM-dd HH:mm')}">Ends</span>
+          </td>
+          <td th:text="${evt.status.displayName}">Status</td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(subscribedEvents)}">
+          <td colspan="5" style="text-align:center;">You have no subscriptions.</td>
+        </tr>
+      </tbody>
+    </table>
   </main>
 
 </body>

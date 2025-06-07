@@ -1,12 +1,10 @@
 package edu.khlep.controller;
 
 import edu.khlep.model.AppUser;
-import edu.khlep.model.Event;
 import edu.khlep.service.EventService;
 import edu.khlep.service.UserService;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -39,16 +37,6 @@ public class EventController {
             eventService.unregisterCurrentUserFromEvent(id);
         }
         return "redirect:/main";
-    }
-
-    @GetMapping("/my-events")
-    @Secured("ROLE_PARTICIPANT")
-    public String viewMyEvents(Model model) {
-        AppUser currentUser = userService.getCurrentUser();
-        if (currentUser != null) {
-            model.addAttribute("events", eventService.getEventsForCurrentUser());
-        }
-        return "event/my_events"; 
     }
     
 }

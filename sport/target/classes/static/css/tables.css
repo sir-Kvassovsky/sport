@@ -128,4 +128,21 @@ th {
 dt {
   font-weight: bold;
 }
-
+.search-form {
+  margin-bottom: 20px;
+  text-align: right;
+}
+.search-input {
+  padding: 6px 10px;
+  font-size: 14px;
+  width: 200px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+.search-button {
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 4px;
+  border: 1px solid #888;
+  cursor: pointer;
+}

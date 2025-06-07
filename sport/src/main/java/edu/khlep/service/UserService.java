@@ -5,11 +5,13 @@ import edu.khlep.repository.UserRepository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -52,6 +54,19 @@ public class UserService implements UserDetailsService {
     }
     public List<AppUser> findAll() {
         return userRepository.findAll();
+    }
+    @Transactional(readOnly = true)
+    public long countAllUsers() {
+        return userRepository.count();
+    }
+
+    @Transactional(readOnly = true)
+    public long countParticipants() {
+        return userRepository.countByRole("PARTICIPANT");
+    }
+
+    public List<AppUser> listAllUsers(Sort sort) {
+        return userRepository.findAll(sort);
     }
     
     public AppUser addUser(AppUser user) {

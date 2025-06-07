@@ -5,9 +5,6 @@ import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-import edu.khlep.model.Event.EventStatus;
-import edu.khlep.model.Event.EventVenueType;
-
 @Entity
 @Table(name = "events")
 public class Event {

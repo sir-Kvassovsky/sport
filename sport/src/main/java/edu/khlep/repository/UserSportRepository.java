@@ -17,7 +17,7 @@ public interface UserSportRepository
         extends JpaRepository<EventParticipant, EventParticipant.EventParticipantId> {
 
     List<EventParticipant> findAllByUser(AppUser user);
-    
+    List<EventParticipant> findAllByEvent(Event event);
 
     @Modifying
     @Transactional

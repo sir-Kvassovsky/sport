@@ -3,6 +3,8 @@ package edu.khlep.service;
 import java.time.OffsetDateTime;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -11,20 +13,19 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.khlep.model.AppUser;
 import edu.khlep.model.Event;
 import edu.khlep.model.EventParticipant;
-import edu.khlep.model.EventParticipant.EventParticipantId;
 import edu.khlep.repository.SportEventRepository;
 import edu.khlep.repository.UserSportRepository;
 
 @Service
 public class EventService {
 
-    private final SportEventRepository             eventRepo;
-    private final UserSportRepository  participantRepo;
-    private final UserService              userService;
+    private final SportEventRepository eventRepo;
+    private final UserSportRepository participantRepo;
+    private final UserService userService;
 
     public EventService(SportEventRepository eventRepo,
                         UserSportRepository participantRepo,
-                        UserService  userService){
+                        UserService userService) {
         this.eventRepo       = eventRepo;
         this.participantRepo = participantRepo;
         this.userService     = userService;
@@ -42,11 +43,30 @@ public class EventService {
     public List<Event> listAllEvents(Sort sort) {
         return eventRepo.findAll(sort);
     }
+    
 
+    @Transactional
+    public Event updateEvent(Event incoming) {
+        Event persisted = eventRepo.findById(incoming.getId())
+                .orElseThrow(() -> new RuntimeException("Event not found"));
 
-    public Event updateEvent(Event e) {
-        return eventRepo.save(e);
+        persisted.getParticipants().size();
+        persisted.setName(incoming.getName());
+        persisted.setDescription(incoming.getDescription());
+        persisted.setPlace(incoming.getPlace());
+        persisted.setVenueType(incoming.getVenueType());
+        persisted.setMaxParticipants(incoming.getMaxParticipants());
+        persisted.setStatus(incoming.getStatus());
+        if (incoming.getStartsAt() != null) {
+            persisted.setStartsAt(incoming.getStartsAt());
+        }
+        if (incoming.getEndsAt() != null) {
+            persisted.setEndsAt(incoming.getEndsAt());
+        }
+
+        return eventRepo.save(persisted);
     }
+
 
     public void deleteEvent(Long id) {
         eventRepo.deleteById(id);
@@ -90,7 +110,7 @@ public class EventService {
             throw new RuntimeException("User is not registered for the event");
         }
 
-        participantRepo.deleteById(id);
+        participantRepo.deleteByEventIdAndUserId(eventId, user.getId());
 
         long count = participantRepo.countByEvent(event);
         event.setCurrentParticipantsCount((int) count);
@@ -98,16 +118,29 @@ public class EventService {
         eventRepo.save(event);
     }
 
-
     public List<Event> getEventsForCurrentUser() {
         AppUser user = userService.getCurrentUser();
         return participantRepo.findAllByUser(user)
-                            .stream()
-                            .map(EventParticipant::getEvent)
-                            .toList();
+                              .stream()
+                              .map(EventParticipant::getEvent)
+                              .toList();
+    }
+    public List<AppUser> getParticipantsForEvent(Long eventId) {
+    Event e = getEventById(eventId);
+    return participantRepo.findAllByEvent(e)
+                          .stream()
+                          .map(EventParticipant::getUser)
+                          .toList();
+    }
+    @Transactional(readOnly = true)
+    public Page<Event> searchEvents(String keyword, Pageable pageable) {
+        if (keyword == null || keyword.isBlank()) {
+            return Page.empty(pageable);
+        }
+        return eventRepo.findByNameContainingIgnoreCase(keyword.trim(), pageable);
     }
 
-    @Scheduled(cron = "0 */5 * * * *") 
+    @Scheduled(cron = "0 */5 * * * *")
     @Transactional
     public void closeEvents24HoursBeforeStart() {
         OffsetDateTime cutoff = OffsetDateTime.now().plusHours(24);
@@ -120,7 +153,7 @@ public class EventService {
         }
     }
 
-    @Scheduled(cron = "0 0 * * * *")
+    @Scheduled(cron = "0 */5 * * * *")
     @Transactional
     public void archivePastEvents() {
         OffsetDateTime now = OffsetDateTime.now();
@@ -131,5 +164,4 @@ public class EventService {
             eventRepo.save(e);
         }
     }
-
 }

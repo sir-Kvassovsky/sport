@@ -9,12 +9,14 @@
 </head>
 <body>
   <div class="tabs">
-    <a th:href="@{/main}" class="tab" th:classappend="${tab == 'main'} ? 'active-tab' : ''">Active Events</a> 
-    <a sec:authorize="!hasRole('ROLE_ANONYMOUS')" 
-        th:href="@{/archive}" class="tab" th:classappend="${tab == 'archive'} ? 'active-tab' : ''">Archived Events</a>
-    <a sec:authorize="hasRole('ROLE_PARTICIPANT') or hasRole('ROLE_MANAGER')" 
-        th:href="@{/profile}" class="tab" th:classappend="${activeTab=='profile'} ? ' active' : ''">Profile</a>
-    <a th:href="@{/about}" class="tab" th:classappend="${activeTab=='about'} ? ' active' : ''">About the Author</a>
+    <a th:href="@{/main}" class="tab" th:classappend="${tab == 'main'} ? 'active-tab' : ''">Active Events</a>
+    <a sec:authorize="!hasRole('ROLE_ANONYMOUS')"
+       th:href="@{/archive}" class="tab" th:classappend="${tab == 'archive'} ? 'active-tab' : ''">Archived Events</a>
+    <a sec:authorize="!hasRole('ROLE_ANONYMOUS')"
+        th:href="@{/search}" class="tab" th:classappend="${tab == 'search'} ? 'active-tab' : ''">Search Events</a>
+    <a sec:authorize="hasRole('ROLE_PARTICIPANT') or hasRole('ROLE_MANAGER')"
+       th:href="@{/profile}" class="tab" th:classappend="${activeTab=='profile'} ? 'active-tab' : ''">Profile</a>
+    <a th:href="@{/about}" class="tab" th:classappend="${activeTab=='about'} ? 'active-tab' : ''">About the Author</a>
   </div>
 
   <header>
@@ -58,13 +60,19 @@
         <div class="profile-row">
         <dt>Опыт работы с технологиями</dt>
         <dd>
-          Spring Boot: менее года; Thymeleaf: менее года; PostgreSQL: менее года
+          Spring Boot — использовал для построения серверной части приложения. Реализовал обработку HTTP-запросов через контроллеры и настроил безопасность с помощью Spring Security.
+        </dd>
+        <dd>
+          Thymeleaf — применял для создания динамических HTML-страниц. Использовал шаблоны для отображения информации об ивентах, регистрации, авторизации, а также для административных и пользовательских панелей.
+        </dd>
+        <dd>
+          PostgreSQL — спроектировал и реализовал структуру базы данных для хранения данных о спортивных событиях, пользователях, заявках и ролях. Использовал Spring Data JPA для взаимодействия с БД и реализации CRUD-операций.
         </dd>
         </div>
 
         <div class="profile-row">
         <dt>Даты начала и завершения проекта</dt>
-        <dd>01.05.2025 – 18.05.2025</dd>
+        <dd>01.05.2025 – 01.06.2025</dd>
         </div>
       </dl>
     </section>

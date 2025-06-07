@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="en-GB">
 <head>
   <meta charset="UTF-8">
   <title>About the Event</title>
@@ -9,12 +10,14 @@
 </head>
 <body>
   <div class="tabs">
-    <a th:href="@{/main}" class="tab" th:classappend="${tab == 'main'} ? 'active-tab' : ''">Active Events</a> 
-    <a sec:authorize="!hasRole('ROLE_ANONYMOUS')" 
-        th:href="@{/archive}" class="tab" th:classappend="${tab == 'archive'} ? 'active-tab' : ''">Archived Events</a>
-    <a sec:authorize="hasRole('ROLE_PARTICIPANT') or hasRole('ROLE_MANAGER')" 
-        th:href="@{/profile}" class="tab" th:classappend="${activeTab=='profile'} ? ' active' : ''">Profile</a>
-    <a th:href="@{/about}" class="tab" th:classappend="${activeTab=='about'} ? ' active' : ''">About the Author</a>
+    <a th:href="@{/main}" class="tab" th:classappend="${tab == 'main'} ? 'active-tab' : ''">Active Events</a>
+    <a sec:authorize="!hasRole('ROLE_ANONYMOUS')"
+       th:href="@{/archive}" class="tab" th:classappend="${tab == 'archive'} ? 'active-tab' : ''">Archived Events</a>
+    <a sec:authorize="!hasRole('ROLE_ANONYMOUS')"
+        th:href="@{/search}" class="tab" th:classappend="${tab == 'search'} ? 'active-tab' : ''">Search Events</a>
+    <a sec:authorize="hasRole('ROLE_PARTICIPANT') or hasRole('ROLE_MANAGER')"
+       th:href="@{/profile}" class="tab" th:classappend="${activeTab=='profile'} ? 'active-tab' : ''">Profile</a>
+    <a th:href="@{/about}" class="tab" th:classappend="${activeTab=='about'} ? 'active-tab' : ''">About the Author</a>
   </div>
 
   <header>
@@ -50,6 +53,32 @@
         <a th:href="@{/}">Back to Events</a>
       </div>
     </section>
+    <h3  sec:authorize="hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN') ">User Table</h3>
+    <table  sec:authorize="hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN') ">
+    <thead>
+      <tr>
+        <th>
+            Username</th>
+        <th>Last Name 
+        </th>
+        <th>First Name </th>
+        <th>Birth Year </th>
+        <th>Role 
+        </th>
+      </tr>
+    </thead>
+
+        <tbody>
+          <tr th:each="user : ${users}">
+            <td th:text="${user.username}">jdoe</td>
+            <td th:text="${user.lastName}">Doe</td>
+            <td th:text="${user.firstName}">John</td>
+            <td th:text="${user.birthYear}">1980</td>
+            <td th:text="${#strings.capitalize(user.role.toLowerCase())}">PARTISIPANT</td>
+
+          </tr>
+        </tbody>
+  </table>
   </main>
 
 </body>
