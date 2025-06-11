@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <title>Your Profile</title>
+  <script th:src="@{/js/dark-mode.js}" defer></script>
+  <link rel="stylesheet" th:href="@{/css/tables.css}" />
+</head>
+<body>
+  <div class="tabs">
+    <a th:href="@{/main}" class="tab" th:classappend="${tab == 'main'} ? 'active-tab' : ''">Active Events</a>
+    <a sec:authorize="!hasRole('ROLE_ANONYMOUS')"
+       th:href="@{/archive}" class="tab" th:classappend="${tab == 'archive'} ? 'active-tab' : ''">Archived Events</a>
+    <a sec:authorize="!hasRole('ROLE_ANONYMOUS')"
+        th:href="@{/search}" class="tab" th:classappend="${tab == 'search'} ? 'active-tab' : ''">Search Events</a>
+    <a sec:authorize="hasRole('ROLE_PARTICIPANT') or hasRole('ROLE_MANAGER')"
+       th:href="@{/profile}" class="tab" th:classappend="${activeTab=='profile'} ? 'active-tab' : ''">Profile</a>
+    <a th:href="@{/about}" class="tab" th:classappend="${activeTab=='about'} ? 'active-tab' : ''">About the Author</a>
+  </div>
+
+  <header>
+    <div sec:authorize="!hasRole('ROLE_ANONYMOUS')">
+
+    </div>
+    <button id="darkToggle">🌙</button>
+    <div style="margin-left: 20px;">
+      <div sec:authorize="hasRole('ROLE_ANONYMOUS')">
+        <a th:href="@{/login}">Login</a> /
+        <a th:href="@{/sign-up}">Sign Up</a>
+      </div>
+      <div sec:authorize="hasRole('ROLE_PARTICIPANT') or hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')">
+        <a th:href="@{/logout}">Logout</a>
+      </div>
+      <div sec:authorize="hasRole('ROLE_ADMIN')">
+        <a th:href="@{/admin/dashboard}">Admin Panel</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <h2>Your Profile</h2>
+    <section>
+      <dl class="form-group">
+        <div class="profile-row">
+          <dt>Username:</dt>
+          <dd th:text="${user.username}">jdoe</dd>
+        </div>
+
+        <div class="profile-row">
+          <dt>First Name:</dt>
+          <dd th:text="${user.firstName}">John</dd>
+        </div>
+
+        <div class="profile-row">
+          <dt>Last Name:</dt>
+          <dd th:text="${user.lastName}">Doe</dd>
+        </div>
+
+        <div class="profile-row">
+          <dt>Birth Year:</dt>
+          <dd th:text="${user.birthYear}">1980</dd>
+        </div>
+
+        <div class="profile-row">
+          <dt>Role:</dt>
+          <dd th:text="${#strings.capitalize(user.role.toLowerCase())}">PARTICIPANT</dd>
+        </div>
+      </dl>
+
+      <div class="profile-row">
+        <a th:href="@{/profile/update}">Edit Profile</a>
+      </div>
+      <div class="profile-row">
+        <a th:href="@{/profile/update_password}">Change password</a>
+      </div>
+    </section>
+    <h3 sec:authorize="hasRole('ROLE_PARTICIPANT')">Your Subscribed Events</h3>
+    <table  sec:authorize="hasRole('ROLE_PARTICIPANT')">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Location</th>
+          <th>Starts</th>
+          <th>Ends</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="evt : ${subscribedEvents}">
+          <td><a th:href="@{/event/{id}(id=${evt.id})}" th:text="${evt.name}">Event Name</a></td>
+          <td th:text="${evt.place}">Location</td>
+          <td>
+            <span th:text="${#temporals.format(
+              evt.startsAt.atZoneSameInstant(T(java.time.ZoneId).of('Europe/Moscow')),
+              'yyyy-MM-dd HH:mm')}">Starts</span>
+          </td>
+          <td>
+            <span th:text="${#temporals.format(
+              evt.endsAt.atZoneSameInstant(T(java.time.ZoneId).of('Europe/Moscow')),
+              'yyyy-MM-dd HH:mm')}">Ends</span>
+          </td>
+          <td th:text="${evt.status.displayName}">Status</td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(subscribedEvents)}">
+          <td colspan="5" style="text-align:center;">You have no subscriptions.</td>
+        </tr>
+      </tbody>
+    </table>
+  </main>
+
+</body>
+</html>
