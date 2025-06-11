@@ -16,10 +16,11 @@ import edu.khlep.model.EventParticipant;
 import edu.khlep.repository.SportEventRepository;
 import edu.khlep.repository.UserSportRepository;
 
-/*
+
+@Service
+/**
  * Создание связи между спортивными мероприятиями и записями спростсменов
  */
-@Service
 public class EventService {
 
     private final SportEventRepository eventRepo;
@@ -33,22 +34,21 @@ public class EventService {
         this.participantRepo = participantRepo;
         this.userService     = userService;
     }
-    /*
+    /**
      * Создает новое мероприятие
      */
-
     public Event createEvent(Event e) {
         return eventRepo.save(e);
     }
 
-    /*
+    /**
      * Находит мероприятие по айди
      */
     public Event getEventById(Long id) {
         return eventRepo.findById(id).orElseThrow(
             () -> new RuntimeException("Event not found"));
     }
-    /*
+    /**
      * Выводит все записи спортивных мероприятий
      */
     public List<Event> listAllEvents(Sort sort) {
